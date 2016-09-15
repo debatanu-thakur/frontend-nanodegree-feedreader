@@ -60,8 +60,7 @@ $(function() {
              * then we check whether it has class .menu-hidden
              * this is the class which keeps the menu hidden
              */
-            var bodyCSS=$('body').attr('class');
-            expect(bodyCSS).toBe('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
          /* A test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -75,19 +74,19 @@ $(function() {
             /* on each trigger of the click event
              * we check whether the class in the body
              */
-            menu.trigger('click');
-            var bodyCSS=$('body').attr('class');
+            menu.click();
+            var bodyCSS=$('body');
             /* the .menu-hidden class is removed
              * from the body element thus displaying
              * the menu
              */
-            expect(bodyCSS).not.toBe('menu-hidden');
+            expect(bodyCSS.hasClass('menu-hidden')).not.toBe(true);
             /* On the next click
              * the menu is displayed
              */
-            menu.trigger('click');
-            bodyCSS=$('body').attr('class');
-            expect(bodyCSS).toBe('menu-hidden');
+            menu.click();
+
+            expect(bodyCSS.hasClass('menu-hidden')).toBe(true);
         });
     });
     /* A test suite named "Initial Entries" */
@@ -97,19 +96,17 @@ $(function() {
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
-         */  
+         */
         beforeEach(function(done){
-            loadFeed(0,function(){
-                done();
-            });
+            loadFeed(0,done);
 
-            jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
+            //  jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
         });
-        it('has atleast one entry',function(done){
+        it('has atleast one entry',function(){
             var feed=$('.feed');
             var entry=feed.find('.entry');
             expect(entry.length).toBeGreaterThan(0);
-            done();
+
         })
     });
     /* A test suite named "New Feed Selection" */
@@ -121,21 +118,21 @@ $(function() {
         var feed_0;
         beforeEach(function(done){
             loadFeed(0,function(){
-                feed_0==$('.feed').html();
-                loadFeed(1,function(){done()});
+                feed_0=$('.feed').html();
+                loadFeed(1,done);
             });
-             jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
+             //jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
         });
         it('changes the content of feed',function(done){
             var feed_1=$('.feed').html();
             /* First check that the initial feed is not empty
             */
             expect(feed_0).not.toBe('');
-            /* Then we check that the feed content 
-             * is changed by the next load feed call 
+            /* Then we check that the feed content
+             * is changed by the next load feed call
              */
             expect(feed_0).not.toEqual(feed_1);
-            done();          
+            done();
         });
     });
 }());
